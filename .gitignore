@@ -1,0 +1,11 @@
+secrets.yaml
+*.log
+*.conf
+*.db
+tts
+.HA_VERSION
+.google.token
+.ring_cache.pickle
+.uuid
+google_calendars.yaml
+entity_registry.yaml

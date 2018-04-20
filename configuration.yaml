@@ -1,0 +1,136 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret latitude
+  longitude: !secret longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret elevation
+  # metric for Metric, imperial for Imperial
+  unit_system: imperial
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: America/Chicago
+  # Customization file
+  customize: !include customize.yaml
+
+# Show links to resources in log and frontend
+#introduction:
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  # Secrets are defined in the file secrets.yaml
+  api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  #base_url: wrileystl.hopto.org:2123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+  ignore:
+    - roku
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+# Weather prediction
+sensor:
+  - platform: yr
+
+# Text to speech
+tts:
+  - platform: google
+
+# Cloud
+cloud:
+
+wink:
+  local_control: True
+
+ifttt:
+  key: !secret ifttt_key
+
+#cover:
+#  platform: myq
+#  username: !secret chamberlain_username
+#  password: !secret chamberlain_password
+#  type: chamberlain
+
+ring:
+  username: !secret ring_username
+  password: !secret ring_password
+
+sensor:
+  - platform: openweathermap
+    api_key: !secret openweathermap_key
+    forecast: True
+    monitored_conditions:
+      - weather
+      - temperature
+      - humidity
+      - pressure
+      - clouds
+      - wind_speed
+      - wind_bearing
+  - platform: pollen
+    zip_code: !secret home_zip
+    monitored_conditions:
+      - allergy_average_forecasted
+      - disease_average_forecasted
+  - platform: pi_hole
+    host: 192.168.76.160
+
+#vacuum:
+#  - platform: roomba
+#    host: 192.168.77.30
+#    username: !secret roomba_blid
+#    password: !secret roomba_password
+
+media_player:
+  - platform: roku
+    host: 192.168.76.28
+  - platform: roku
+    host: 192.168.77.19
+  - platform: roku
+    host: 192.168.77.12
+  - platform: cast
+    host: 192.168.77.115
+  - platform: cast
+    host: 192.168.77.117
+
+google:
+  client_id: !secret google_id
+  client_secret: !secret google_secret
+
+camera:
+  - platform: generic
+    still_image_url: "https://icons.wxug.com/data/weather-maps/radar/united-states/jefferson-city-missouri-region-current-radar-animation.gif"
+    name: WundergroundRadar
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
