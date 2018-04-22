@@ -1,0 +1,107 @@
+  - platform: yr
+  - platform: openweathermap
+    api_key: !secret openweathermap_key
+    forecast: True
+    monitored_conditions:
+      - weather
+      - temperature
+      - humidity
+      - pressure
+      - clouds
+      - wind_speed
+      - wind_bearing
+  - platform: pollen
+    zip_code: !secret home_zip
+    monitored_conditions:
+      - allergy_average_forecasted
+      - disease_average_forecasted
+  - platform: template
+    sensors:
+      roomba_batt:
+        value_template: '{{ states.vacuum.roomba.attributes.battery_level }}'
+        friendly_name: 'Roomba'
+        unit_of_measurement: '%'
+        icon_template: >
+          {% set battery_level = states.vacuum.roomba.attributes.battery_level | default(0) | int %}
+          {% set battery_round = (battery_level / 10) |int * 10 %}
+          {% if battery_round >= 100 %}
+            mdi:battery
+          {% elif battery_round > 0 %}
+            mdi:battery-{{ battery_round }}
+          {% else %}
+            mdi:battery-alert
+          {% endif %}
+      ring_front_door_batt:
+        value_template: '{{ states.sensor.ring_front_door_battery.state }}'
+        friendly_name: 'Front Door Sensor'
+        unit_of_measurement: '%'
+        icon_template: >
+          {% set battery_level = states.sensor.ring_front_door_battery.state | default(0) | int %}
+          {% set battery_round = (battery_level / 10) |int * 10 %}
+          {% if battery_round >= 100 %}
+            mdi:battery
+          {% elif battery_round > 0 %}
+            mdi:battery-{{ battery_round }}
+          {% else %}
+            mdi:battery-alert
+          {% endif %}
+      garage_door_state_big:
+        value_template: >-
+          {% if is_state('cover.big_garage_door', 'open') %}
+            Open
+          {% else %}
+            Closed
+          {% endif %}
+        icon_template: >-
+          {% if is_state('cover.big_garage_door', 'open') %}
+            mdi:garage-open
+          {% else %}
+            mdi:garage
+          {% endif %}
+        friendly_name: 'Big Garage Door'
+      garage_door_state_small:
+        value_template: >-
+          {% if is_state('cover.small_garage_door', 'open') %}
+            Open
+          {% else %}
+            Closed
+          {% endif %}
+        icon_template: >-
+          {% if is_state('cover.small_garage_door', 'open') %}
+            mdi:garage-open
+          {% else %}
+            mdi:garage
+          {% endif %}
+        friendly_name: 'Small Garage Door'
+  - platform: ring
+    monitored_conditions:
+      - battery
+      - last_activity
+      - last_ding
+      - last_motion
+      - volume
+  - platform: darksky
+    api_key: !secret darksky_key
+    monitored_conditions:
+      - summary
+      - minutely_summary
+      - hourly_summary
+      - daily_summary
+      - icon
+      - nearest_storm_distance
+      - nearest_storm_bearing
+      - precip_type
+      - precip_intensity
+      - precip_probability
+      - temperature
+      - apparent_temperature
+      - dew_point
+      - wind_speed
+      - wind_bearing
+      - cloud_cover
+      - humidity
+      - pressure
+      - visibility
+      - ozone
+  - platform: uptime
+    unit_of_measurement: hours

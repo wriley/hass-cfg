@@ -1,1 +1,141 @@
-[]
+- alias: 'Automatically close small garage door'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: cover.small_garage_door
+      from: 'closed'
+      to: 'open'
+      for: '00:20:00'
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_auto_garage
+      state: 'off'
+  action:
+    - service: cover.close_cover
+      entity_id: cover.small_garage_door
+    
+- alias: 'Turn on front lights at night'
+  initial_state: 'on'
+  trigger:
+    - platform: sun
+      event: 'sunset'
+      offset: '-00:15:00'
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_exterior_on_sunset
+      state: 'off'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.front_porch_and_outside_garage
+
+- alias: 'Turn off front lights at 2a'
+  initial_state: 'on'
+  trigger:
+    - platform: time
+      at: '02:00:00'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.front_porch_and_outside_garage
+
+- alias: 'Turn on living room lamp at night'
+  initial_state: 'on'
+  trigger:
+    - platform: sun
+      event: 'sunset'
+      offset: '-00:05:00'
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_interior_on_sunset
+      state: 'off'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.living_room_lamp
+
+- alias: 'Turn off living room lamp at morning'
+  initial_state: 'on'
+  trigger:
+    - platform: sun
+      event: 'sunrise'
+      offset: '00:05:00'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.living_room_lamp
+
+- alias: 'Turn on front lights when doorbell rang at night'
+  initial_state: on
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.ring_front_door_ding
+      from: 'off'
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: state
+      entity_id: input_boolean.disable_doorbell
+      state: 'off'
+  action:
+    - service: swith.turn_on
+      entity_id: switch.front_porch_and_outside_garage
+
+- alias: 'Turn off front lights after doorbell rang at night'
+  initial_state: on
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.ring_front_door_ding
+      from: 'on'
+      to: 'off'
+      for: '00:30:00'
+  condition:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: state
+      entity_id: input_boolean.disable_doorbell
+      state: 'off'
+  action:
+    - service: swith.turn_off
+      entity_id: switch.front_porch_and_outside_garage
+
+- alias: 'Turn on front lights when motion detected at night'
+  initial_state: on
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.ring_front_door_motion
+      from: 'off'
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: state
+      entity_id: input_boolean.disable_doorbell
+      state: 'off'
+  action:
+    - service: swith.turn_on
+      entity_id: switch.front_porch_and_outside_garage
+
+- alias: 'Turn off front lights after motion detected at night'
+  initial_state: on
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.ring_front_door_motion
+      from: 'on'
+      to: 'off'
+      for: '00:30:00'
+  condition:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: state
+      entity_id: input_boolean.disable_doorbell
+      state: 'off'
+    - condition: state
+      entity_id: switch.front_porch_and_outside_garage
+      state: 'on'
+      for: '00:30:00'
+      
+  action:
+    - service: swith.turn_off
+      entity_id: switch.front_porch_and_outside_garage

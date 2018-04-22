@@ -1,0 +1,156 @@
+default_view:
+  view: yes
+  icon: mdi:home
+  entities:
+    - group.weather_snapshot
+    - group.garage
+    - group.automation_on_demand
+    - group.interior_lights
+    - group.exterior_lights
+    - camera.front_door
+
+living:
+  name: Living
+  view: yes
+  icon: mdi:sofa
+  entities:
+    - group.living_room
+
+dining:
+  name: Dining
+  view: yes
+  icon: mdi:silverware-variant
+  entities:
+    - group.dining_room
+
+office:
+  name: Office
+  view: yes
+  icon: mdi:desktop-mac
+  entities:
+    - group.basement_office
+
+automation:
+  name: Automation
+  view: yes
+  icon: mdi:robot
+  entities:
+    - group.automation_on_demand
+    - group.automation_override
+
+sensors:
+  name: Sensors
+  view: yes
+  icon: mdi:gauge
+  entities:
+    - group.door_bell
+    - group.garage_doors
+    - group.battery_levels
+    - group.system
+
+Automation On Demand:
+  control: hidden
+  entities:
+    - vacuum.roomba
+
+Automation Override:
+  control: hidden
+  entities:
+    - input_boolean.disable_doorbell
+    - input_boolean.disable_exterior_on_sunset
+    - input_boolean.disable_interior_on_sunset
+
+Living Room:
+  - switch.living_room_lamp
+
+Dining Room:
+  - light.dining_room
+
+Interior Lights:
+  control: hidden
+  entities:
+    - light.dining_room
+    - switch.living_room_lamp
+
+Exterior Lights:
+  control: hidden
+  entities:
+    - switch.front_porch_and_outside_garage  
+
+Basement Office:
+  control: hidden
+  entities:
+    - light.office_cans
+
+Battery Levels:
+  - sensor.roomba_batt
+  - sensor.ring_front_door_batt
+
+Door Bell:
+  - binary_sensor.ring_front_door_ding
+  - binary_sensor.ring_front_door_motion
+
+weatherdashboard:
+  name: Weather
+  view: yes
+  icon: mdi:weather-partlycloudy
+  entities:
+    - group.weather
+    - group.weather_summary
+    - camera.mo_weather_radar
+
+Weather:
+  - sun.sun
+  - sensor.moon
+  - sensor.dark_sky_temperature
+  - sensor.dark_sky_apparent_temperature
+  - sensor.dark_sky_humidity
+  - sensor.dark_sky_cloud_coverage
+  - sensor.dark_sky_precip
+  - sensor.dark_sky_precip_probability
+  - sensor.dark_sky_precip_intensity
+  - sensor.dark_sky_nearest_storm_distance
+#  - sensor.weather_nearest_storm_bearing
+  - sensor.dark_sky_wind_speed
+  - sensor.dark_sky_wind_bearing
+  - sensor.dark_sky_visibility
+  - sensor.dark_sky_ozone
+  - sensor.dark_sky_pressure
+  - sensor.dark_sky_dew_point
+
+Weather Snapshot:
+  - sensor.dark_sky_temperature
+  - sensor.dark_sky_summary
+  - sensor.dark_sky_daily_summary
+
+Weather Summary:
+  - sensor.dark_sky_summary
+  - sensor.dark_sky_minutely_summary
+  - sensor.dark_sky_hourly_summary
+  - sensor.dark_sky_daily_summary
+
+cameras:
+  name: Cameras
+  view: yes
+  icon: mdi:camera
+  entities:
+    - camera.front_door 
+
+Garage:
+  control: hidden
+  entities:
+    - cover.big_garage_door
+    - cover.small_garage_door
+
+Garage Doors:
+  - sensor.garage_door_state_big
+  - sensor.garage_door_state_small
+
+System:
+  - sensor.uptime
+  - binary_sensor.hub
+  - updater.updater
+
+Calendars:
+  - calendar.wrileystlgmailcom
+  - calendar.holidays_in_united_states

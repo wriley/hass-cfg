@@ -26,7 +26,7 @@ http:
   # Secrets are defined in the file secrets.yaml
   api_password: !secret http_password
   # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
-  #base_url: wrileystl.hopto.org:2123
+  base_url: !secret base_url
 
 # Checks for available updates
 # Note: This component will send some information about your system to
@@ -34,6 +34,7 @@ http:
 # For more information, please see:
 # https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
 updater:
+  reporting: no
   # Optional, allows Home Assistant developers to focus on popular components.
   # include_used_components: true
 
@@ -57,58 +58,33 @@ map:
 # Track the sun
 sun:
 
-# Weather prediction
-sensor:
-  - platform: yr
-
 # Text to speech
 tts:
   - platform: google
 
 # Cloud
-cloud:
+#cloud:
 
 wink:
-  local_control: True
 
 ifttt:
   key: !secret ifttt_key
 
-#cover:
-#  platform: myq
-#  username: !secret chamberlain_username
-#  password: !secret chamberlain_password
-#  type: chamberlain
+cover:
+  platform: myq
+  username: !secret chamberlain_username
+  password: !secret chamberlain_password
+  type: chamberlain
 
 ring:
   username: !secret ring_username
   password: !secret ring_password
 
-sensor:
-  - platform: openweathermap
-    api_key: !secret openweathermap_key
-    forecast: True
-    monitored_conditions:
-      - weather
-      - temperature
-      - humidity
-      - pressure
-      - clouds
-      - wind_speed
-      - wind_bearing
-  - platform: pollen
-    zip_code: !secret home_zip
-    monitored_conditions:
-      - allergy_average_forecasted
-      - disease_average_forecasted
-  - platform: pi_hole
-    host: 192.168.76.160
-
-#vacuum:
-#  - platform: roomba
-#    host: 192.168.77.30
-#    username: !secret roomba_blid
-#    password: !secret roomba_password
+vacuum:
+  - platform: roomba
+    host: 192.168.77.30
+    username: !secret roomba_blid
+    password: !secret roomba_password
 
 media_player:
   - platform: roku
@@ -129,8 +105,19 @@ google:
 camera:
   - platform: generic
     still_image_url: "https://icons.wxug.com/data/weather-maps/radar/united-states/jefferson-city-missouri-region-current-radar-animation.gif"
-    name: WundergroundRadar
+    name: MO Weather Radar
+  - platform: ring
+
+binary_sensor:
+  - platform: ring
+    monitored_conditions:
+      - ding
+      - motion
+
+ffmpeg:
 
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
+input_boolean: !include input_boolean.yml
+sensor: !include sensors.yml
